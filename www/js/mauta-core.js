@@ -118,7 +118,7 @@ var infinity = {
     },
     talker_people: function (qst) {
         var doc = nlp(qst);
-        return doc.people();
+        return doc.people().data();
     },
     talker_dates: function (qst) {
         var doc = nlp(qst);
@@ -149,7 +149,7 @@ var infinity = {
         analyzer.dates = infinity.talker_dates(qst);      // 'Tuesday Sept. 4rth'
 
         $.each(analyzer.pronouns, function () {
-            if (this === "you" || "your" || "youre" || "you're") {
+            if (this === "you" || this === "your" ||this === "youre" || this === "you're") {
                 analyzer.isSelf = true;
                 return;
             }
@@ -203,8 +203,21 @@ var infinity = {
                 return false;
             }
             //Analyze nouns
+            if (analyzer.people.length > 0) {
+                //Look person
+                if (analyzer.people.length ==1) {
+                    let person = analyzer.people[0].firstName;
+                    analyzer.response = analyzer.response + ' Who is ' + person + '. Is ' + analyzer.people[0].pronoun + ' a friend';
+
+                }
+         
+            }
             $.each(analyzer.nouns, function () {
-                analyzer.response = analyzer.response +' ' +this
+                //split each noun..
+                let nouns = this.split(" ");
+                $.each(nouns, function () {
+                });
+                //analyzer.response = analyzer.response +' ' +this
             });
         }
     },
