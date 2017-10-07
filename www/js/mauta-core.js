@@ -27,13 +27,14 @@ var analyzer = {
     places: [],
     dates: 0,
     numbers: 0,
+    status:0,
     response:''
 
 }
     var phrases = {
         decisionValue: 0,
         decisionContext: 0,
-        phrase_qst: ['what', 'when', 'why', 'who', 'how', 'could', 'would', 'it'],
+        phrase_qst: ['what', 'whats','when', 'why', 'who', 'how', 'could', 'would', 'it'],
         pronouns: ['all', 'another', 'any', 'anybody', 'anyone', 'anything', 'both', 'each', 'each other', 'either', 'everybody', 'everyone', 'everything', 'few', 'he', 'her', 'hers', 'herself', 'him', 'himself', 'his', 'I', 'it', 'its', 'itself', 'little', 'many', 'me', 'mine', 'more', 'most', 'much', 'my', 'myself', 'neither', 'no one', 'nobody', 'none', 'nothing', 'one', 'one another', 'other', 'others', 'our', 'ours', 'ourselves', 'several', 'she', 'some', 'somebody', 'someone',
             'something', 'that', 'their', 'theirs', 'them', 'themselves', 'these', 'they', 'this', 'those', 'us', 'we', 'what', 'whatever', 'which', 'whichever', 'who', 'whoever', 'whom', 'whomever', 'you', 'your', 'yours', 'yourself', 'yourselve', 'whose'],
         phrase_self: ['you'],
@@ -147,19 +148,19 @@ var infinity = {
         analyzer.adjectives = infinity.talker_adjectives(qst); // 'nice', 'juicy'
         analyzer.dates = infinity.talker_dates(qst);      // 'Tuesday Sept. 4rth'
 
-        $.each(analyzer.nouns, function () {
-            if (this === "you") {
+        $.each(analyzer.pronouns, function () {
+            if (this === "you" || "your" || "youre" || "you're") {
                 analyzer.isSelf = true;
                 return;
             }
         });
 
-        $.each(analyzer.terms, function () {
-            if (this.text.toLowerCase() === 'you') {
-                analyzer.isSelf = true;
-                return;
-            }
-        });
+        //$.each(analyzer.terms, function () {
+        //    if (this.text.toLowerCase() === 'you') {
+        //        analyzer.isSelf = true;
+        //        return;
+        //    }
+        //});
 
       
 
@@ -184,54 +185,33 @@ var infinity = {
                     if (analyzer.isSelf) {
                         if (phrases.phrase_self_verbs.indexOf(this.toLowerCase())>=0) {
                             // you asking mauta what currently working on
-                            analyzer.response = analyzer.response  + ' working on blah blah' 
+                            analyzer.response = analyzer.response + ' working on blah blah'; //Create object of self activities example : Task, recent task, pending task, propertise of host library.
+                            analyzer.status = 1;
                         }
+                    }
+
+                    //Checking type of verb.
+                    if (this.indexOf("ing") >= 0) {
+                        //this is an action type verb
+                        analyzer.response = 'I am not ' + this;
                     }
                 });
 
 
             }
-          
+            if (analyzer.status === 1) {
+                return false;
+            }
+            //Analyze nouns
+            $.each(analyzer.nouns, function () {
+                analyzer.response = analyzer.response +' ' +this
+            });
         }
     },
     start: function () {
         console.log("listener started");
     },
-    //listen: function (question) {
-    //    var doc = nlp(question);
-    //    //Get first term
-    //    var term = doc.list[0].terms[0];
-    //    if (phrases.phrase_qst.indexOf(doc.list[0].terms[0].text) > -1) {
-    //        phrases.decisionValue = 1;//1 is a question
-    //    }
-
-    //    response.verbs = doc.verbs().out('list');
-    //    response.nouns = doc.nouns();
-    //    response.people = doc.people();
-    //    response.pronouns = phrases.getpronouns(doc.list[0].terms);
-    //    response.places = doc.places();
-    //    // var pnoun = nlp.person("Tony Hawk").pronoun();
-    //    response.adjectives = doc.adjectives(); // 'nice', 'juicy'
-    //    response.dates = doc.dates();      // 'Tuesday Sept. 4rth'
-
-    //    if (phrases.decisionValue === 1) {
-    //        //Answering question
-    //        if (response.pronouns) {
-    //            if (response.pronouns.indexOf('you') > -1) {
-    //                phrases.decisionContext = 1;//context is self
-    //                response.context = 'question';
-    //                response.about = 'self';
-    //                if (response.verbs) {
-    //                    if (response.verbs.length === 1) {
-    //                        //Get meaning of verb
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-
-    //    return response;
-    //},
+   
     phrases_number: function (sent_) {
         var r = nlp(sent_).values().toNumber();
         return r.out('text');
