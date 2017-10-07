@@ -27,7 +27,7 @@ console.log(infinity.master);
             var countries = getCountryList();
             var cities = getCities('Australia');
             $("#yousaid").html($("#yousay").val());
-            $("#mautasays").html(infinity.talker_analyze($("#yousay").val(), analyzer));
+            $("#mautasays").html(infinity.talker_analyze($("#yousay").val(), analyzer) + " is your response");
 
         }
 });
