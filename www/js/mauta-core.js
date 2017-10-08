@@ -242,7 +242,7 @@ var infinity = {
                 let nouns = this.split(" ");
                 $.each(nouns, function () {
                 });
-                //analyzer.response = analyzer.response +' ' +this
+                //analyzer.response = analyzer.response +' ' +this;
             });
         }
     },
