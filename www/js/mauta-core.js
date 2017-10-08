@@ -13,6 +13,9 @@ var response = {
     dates: 0,
     numbers: 0
 };
+var mauta={
+
+}
 var analyzer = {
     type: 0,
     context: 'none',
@@ -72,6 +75,27 @@ var infinity = {
     check_master_state: function (category) {
         var state = false;
         $.each(infinity.master, function (key, value) {
+            if (this.key === category) {
+
+                state = true;
+                return false;
+            }
+        });
+        return state;
+    },
+    add_self: function (category, value) {
+        var state = infinity.check_self_state(category);
+        if (state === false) {
+            var dyna_mo = {};
+            dyna_mo.key = category;
+            dyna_mo.value = value;
+            infinity.self.push(dyna_mo);
+        }
+        return state;
+    },
+    check_self_state: function (category) {
+        var state = false;
+        $.each(infinity.self, function (key, value) {
             if (this.key === category) {
 
                 state = true;
@@ -193,6 +217,7 @@ var infinity = {
                     //Checking type of verb.
                     if (this.indexOf("ing") >= 0) {
                         //this is an action type verb
+                        // Analyzer ver
                         analyzer.response = 'I am not ' + this;
                     }
                 });

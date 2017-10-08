@@ -1,4 +1,13 @@
-$(document).ready(function(){
+$(document).ready(function () {
+    //Section Self
+    let t = navigator.hardwareConcurrency;
+    let selfInfo = {
+        'name': 'Mauta',
+        'cpu': navigator.cpuClass,
+        'language': navigator.language,
+        'platform': navigator.platform
+    };
+    //Section Force Data
     var names = {
         'first': 'Ivan',
         'middle': 'Isaac',
@@ -13,7 +22,7 @@ $(document).ready(function(){
         'province': 'Kent',
         'country': 'United Kingdom'
     };
-
+    console.log(infinity.add_self('about', selfInfo));
 console.log(infinity.add_master('name',names));
 console.log(infinity.add_master('address',address));
 
