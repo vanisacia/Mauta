@@ -5,7 +5,9 @@ $(document).ready(function () {
         'name': 'Mauta',
         'cpu': navigator.cpuClass,
         'language': navigator.language,
-        'platform': navigator.platform
+        'platform': navigator.platform,
+        'age': 'nano byte',
+        'address':'www. I live in the cloud. Ha ha'
     };
     //Section Force Data
     var names = {
