@@ -33,7 +33,7 @@ console.log(infinity.add_master('address', address));
 console.log(infinity.master);
 infinity.update_master('address','street','The Avenue');
 console.log(infinity.master);
-    speechIn.listen();
+    speechIn.listen();//Made changes
 
     $("#yousay").keyup(function (e) {
         if (e.keyCode === 13) {
