@@ -58,6 +58,7 @@ body {
 .top-mauta{
     position:relative; 
     cursor:pointer;
+    display:none;
 }
 
     .top-mauta .centered-fixed-mauta {

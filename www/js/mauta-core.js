@@ -22,6 +22,9 @@ var analyzer = {
     about: 'object',
     isQuest: false,
     isSelf: false,
+    isSelfFeeling:false,
+    responseType: 0,//exact response what, when, where 0. Descriptive answers why 1
+    responseCategory:0,// 0 means the question notion is generic and 1 means is a specific question that is stored
     nouns: [],
     adjectives: [],
     verbs: [],
@@ -31,17 +34,42 @@ var analyzer = {
     dates: 0,
     numbers: 0,
     status:0,
-    response:''
+    response: '',
+    reset: function () {
+        for (var prop in this) {
+            if (!(typeof this[prop] === "function")) {
+                this[prop] = [];
+            }
+        }
+    }
 
 }
-    var phrases = {
+var analyzerWordMeaning = {
+    word: [],
+    descFull: [],
+    descSimple: [],
+    accessMeaning: function (wrd) {
+        let meaning = 'Found the meaning of this word';
+        descFull[word.indexOf(wrd)].push(meaning);
+    },
+    reset: function () {
+        for (var prop in this) {
+            if (!(typeof this[prop] === "function")) {
+                this[prop] = [];
+            }
+        }
+    }
+}
+var phrases = {
         decisionValue: 0,
         decisionContext: 0,
-        phrase_qst: ['what', 'whats','when', 'why', 'who', 'how', 'could', 'would', 'it'],
+        phrase_qst: ['what', 'whats', 'when', 'why', 'who', 'how', 'could', 'would', 'it', 'are','is','tell'],
+        phrase_elevation: ['why'],
         pronouns: ['all', 'another', 'any', 'anybody', 'anyone', 'anything', 'both', 'each', 'each other', 'either', 'everybody', 'everyone', 'everything', 'few', 'he', 'her', 'hers', 'herself', 'him', 'himself', 'his', 'I', 'it', 'its', 'itself', 'little', 'many', 'me', 'mine', 'more', 'most', 'much', 'my', 'myself', 'neither', 'no one', 'nobody', 'none', 'nothing', 'one', 'one another', 'other', 'others', 'our', 'ours', 'ourselves', 'several', 'she', 'some', 'somebody', 'someone',
             'something', 'that', 'their', 'theirs', 'them', 'themselves', 'these', 'they', 'this', 'those', 'us', 'we', 'what', 'whatever', 'which', 'whichever', 'who', 'whoever', 'whom', 'whomever', 'you', 'your', 'yours', 'yourself', 'yourselve', 'whose'],
-        phrase_self: ['you'],
-        phrase_self_verbs:['processing','working'],//These are verbs performed by self=you. So when were refer to self and theres a verb in the context it can only these else it return false as not participating
+        phrase_self: ['you', 'your', 'youre', 'yourself', "you're"],
+        phrase_self_verbs: ['processing', 'working'],//These are verbs performed by self=you. So when were refer to self and theres a verb in the context it can only these else it return false as not participating
+        phrase_self_propertise:['name','address','age','old','color','sex','gender','reproduction','about', 'yourself'], //where isSelf a
         getpronouns: function (terms) {
             var _terms = [];
             $.each(terms, function () {
@@ -51,11 +79,7 @@ var analyzer = {
             });
             return _terms;
         }
-    };
- 
-
-var phrase_qst = ['who', 'how', 'what', 'why', 'is', 'when', 'whom', 'where', 'are'];
-var phrase_self = ['you'];
+};
 
 var infinity = {
     self: [],
@@ -124,6 +148,12 @@ var infinity = {
     talker_tokeniz: function (qst) {
 
     },
+    talker_question: function (qst) {
+     return   nlp(qst).questions().data().length;
+    },
+    talker_topics: function (qst) {
+      return  nlp(qst).topics().data();
+    },
     talker_verbs: function (qst) {
         var doc = nlp(qst);
         return doc.verbs().out('array');
@@ -134,7 +164,7 @@ var infinity = {
     },
     talker_places: function (qst) {
         var doc = nlp(qst);
-        return doc.places();
+        return doc.places().out('array');;
     },
     talker_adjectives: function (qst) {
         var doc = nlp(qst);
@@ -152,7 +182,7 @@ var infinity = {
         var doc = nlp(qst);
         analyzer.terms = doc.list[0].terms;
         //Get first term
-        if (phrase_qst.indexOf(doc.list[0].terms[0].text.toLowerCase()) >= 0) {
+        if (phrases.phrase_qst.indexOf(doc.list[0].terms[0].text.toLowerCase()) >= 0) {
             analyzer.isQuest = true;
         }
         analyzer.nouns = infinity.talker_nouns(qst);
@@ -164,7 +194,7 @@ var infinity = {
             phrases.decisionValue = 1;//1 is a question
         }
 
-       
+        let q = infinity.talker_question(qst);
         analyzer.people = infinity.talker_people(qst)
         analyzer.pronouns = phrases.getpronouns(doc.list[0].terms);
         analyzer.places = infinity.talker_places(qst);
@@ -173,79 +203,143 @@ var infinity = {
         analyzer.dates = infinity.talker_dates(qst);      // 'Tuesday Sept. 4rth'
 
         $.each(analyzer.pronouns, function () {
-            if (this === "you" || this === "your" ||this === "youre" || this === "you're") {
+            if(this == "you" || this == "your" ||this == "youre" || this =="you're") {
                 analyzer.isSelf = true;
                 return;
             }
         });
-
-        //$.each(analyzer.terms, function () {
-        //    if (this.text.toLowerCase() === 'you') {
-        //        analyzer.isSelf = true;
-        //        return;
-        //    }
-        //});
-
-      
+        $.each(analyzer.terms, function () {
+            if (phrases.phrase_self.indexOf(this.text) >= 0) {
+                analyzer.isSelf = true;
+                return;
+            }
+        });
+        if (analyzer.isSelf) {
+            if (analyzer.isQuest) {
+                //getting response type
+                analyzer.responseType = 0;
+                if (phrases.phrase_elevation.indexOf(doc.list[0].terms[0].text.toLowerCase()) >= 0) {
+                    analyzer.responseType = 1;
+                    analyzer.responseCategory = 1;
+                }
+            }
+        }
+        analyzer.response = "";
 
         infinity.talker_breakDown(analyzer);
+        analyzerWordMeaning.reset();
+        let t = analyzerWordMeaning;
         return analyzer.response;
     
     },
     talker_breakDown: function (analyzer) {
         if (analyzer.isQuest) {
             if (analyzer.isSelf) {
-                analyzer.response = 'I am';
+                if (analyzer.responseType === 0) {
+                    analyzer.response = 'I am ';
+                } else {
+                    analyzer.response = 'Because '; //This requires a descriptive response like 
+                }
+                if (analyzer.nouns.length === 0) {
+                    if (analyzer.pronouns) {
+                        if (phrases.phrase_self.indexOf(analyzer.pronouns[0])>=0) {
+                            //This means self feeling . How are you.
+                            analyzer.response = 'My feelings are still under development ... Wish I have an answer';
+                            analyzer.isSelfFeeling = true;
+                        }
+                    }
+                }
             }
+        }
+        if (!(analyzer.isSelfFeeling)) {
             //Get meaning of verbs
             if (analyzer.verbs.length > 0) {
                 //check each verb and verbs in question can be ignored
                 $.each(analyzer.verbs, function () {
-                    if (phrases.phrase_qst.indexOf(this.toLowerCase()) < 0 ) {
+                    if (phrases.phrase_qst.indexOf(this.toLowerCase()) < 0) {
                         // verbs that are not a question.
                         let verb = this;
                         //sample
                     }
                     if (analyzer.isSelf) {
-                        if (phrases.phrase_self_verbs.indexOf(this.toLowerCase())>=0) {
+                        if (phrases.phrase_self_verbs.indexOf(this.toLowerCase()) >= 0) {
                             // you asking mauta what currently working on
                             analyzer.response = analyzer.response + ' working on blah blah'; //Create object of self activities example : Task, recent task, pending task, propertise of host library.
                             analyzer.status = 1;
                         }
                     }
-
                     //Checking type of verb.
                     if (this.indexOf("ing") >= 0) {
                         //this is an action type verb
-                        // Analyzer ver
+                        // Analyzer verb
                         analyzer.response = 'I am not ' + this;
                     }
                 });
-
-
             }
             if (analyzer.status === 1) {
                 return false;
             }
-            //Analyze nouns
+
             if (analyzer.people.length > 0) {
                 //Look person
-                if (analyzer.people.length ==1) {
+                if (analyzer.people.length == 1) {
                     let person = analyzer.people[0].firstName;
-                    analyzer.response = analyzer.response + ' Who is ' + person + '. Is ' + analyzer.people[0].pronoun + ' a friend';
-
+                    analyzer.response = ' Who is ' + person + '. Is ' + analyzer.people[0].pronoun + ' a friend';
                 }
-         
             }
-            $.each(analyzer.nouns, function () {
-                //split each noun..
-                let nouns = this.split(" ");
-                $.each(nouns, function () {
-                });
-                //analyzer.response = analyzer.response +' ' +this;
-            });
+            //Analyze nouns
+            if (analyzer.nouns) {
+                if (analyzer.nouns.length == 1) {
+                    let nounNalyzed = analyzer.nouns[0].split(" ");
+                    $.each(nounNalyzed, function () {
+                        analyzerWordMeaning.word.push(this);
+                    });
+                }
+                else {
+                    $.each(analyzer.nouns, function () {
+                        //split each noun..
+                        let nouns = this.split(" ");
+                        $.each(nouns, function () {
+                        });
+                        //analyzer.response = analyzer.response +' ' +this
+                    });
+                }
+            }
+            if (analyzer.isSelf) {
+                let currentPropAnswer;
+                if (analyzerWordMeaning.word) { // Check nouns first for a quick reference if no reference found then check all terms
+                    $.each(analyzerWordMeaning.word, function () {
+                        if (phrases.phrase_self_propertise.indexOf(this.trim().toLowerCase()) >= 0) {
+                            //this word has to do with self property. look into self for about this answer
+                            currentPropAnswer = 'My ' + this + ' is ' + infinity.self[0].value[this];
+                            return false;
+                        }
+                    });
+                    if (!(currentPropAnswer)) {
+                        $.each(analyzer.terms, function () {
+                            if (phrases.phrase_self_propertise.indexOf(this.text.trim().toLowerCase()) >= 0) {
+                                //this word has to do with self property. look into self for about this answer
+                                if (this.text.trim().toLowerCase() === "about" || this.text.trim().toLowerCase() === "yourself") {
+                                    let ans = "";
+                                    //Get all info
+                                    for (var obj in infinity.self[0].value) {
+
+                                        ans = ans + "<div > My " + obj + " is " + infinity.self[0].value[obj] + "</div>";
+                                    }
+                                    currentPropAnswer = ans;
+                                    return false;
+                                }
+                            }
+                        });
+                    }
+
+                    if (currentPropAnswer) {
+                        analyzer.response = currentPropAnswer;
+                    }
+                }
+            }
         }
-    },
+     },
     start: function () {
         console.log("listener started");
     },
