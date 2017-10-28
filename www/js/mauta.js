@@ -59,6 +59,7 @@ console.log(infinity.master);
     function onError(error) {
         alert('code weired: ' + error.code + '\n' +
             'message: ' + error.message + '\n');
+        //made a change
     }
 });
 
