@@ -22,14 +22,16 @@ $(document).ready(function () {
         'province': 'Kent',
         'country': 'United Kingdom'
     };
+
+    //var voices = speechSynthesis.getVoices();
     console.log(infinity.add_self('about', selfInfo));
 console.log(infinity.add_master('name',names));
-console.log(infinity.add_master('address',address));
+console.log(infinity.add_master('address', address));
 
 console.log(infinity.master);
 infinity.update_master('address','street','The Avenue');
 console.log(infinity.master);
-
+    speechIn.listen();
 
     $("#yousay").keyup(function (e) {
         if (e.keyCode === 13) {
