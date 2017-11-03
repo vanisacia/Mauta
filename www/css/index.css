@@ -155,3 +155,37 @@ h1 {
     animation: fade 3000ms infinite;
     -webkit-animation: fade 3000ms infinite;
 }
+.mauta{
+    border:1px solid;
+}
+
+    .mauta .row {
+        border-radius: 10px;
+        padding: 10px;
+    }
+    .mauta .conversation .row {
+       
+        background-color: rgba(120, 173, 226, 0.38);
+    }
+    .mauta .conversation .row .mauta-say {
+        
+    }
+        .mauta .conversation .row .mauta-say .name-title {
+            
+            font:900;
+            font-size:1.5em;
+        }
+        .mauta .conversation .row .mauta-say .messsages-title {
+            color: #b44505;
+        }
+
+.mauta .dyn_output {
+    
+}
+    .mauta .dyn_output .row {
+        border-bottom: 1px solid;
+    }
+    .mauta .dyn_output .row span {
+       margin:4px;
+       padding:4px;
+    }

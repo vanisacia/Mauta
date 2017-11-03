@@ -1,5 +1,14 @@
 $(document).ready(function () {
     //Section Self
+
+    window.resizeTo("500", "600");
+    var dyna_mo = {};
+    dyna_mo.key = 'Data';
+    for (var x = 0; x < 10; x++) {
+        dyna_mo['nam' + x] = x;
+    }
+
+
     let t = navigator.hardwareConcurrency;
     let selfInfo = {
         'name': 'Mauta',
@@ -26,22 +35,28 @@ $(document).ready(function () {
     };
 
     //var voices = speechSynthesis.getVoices();
-    console.log(infinity.add_self('about', selfInfo));
+console.log(infinity.add_self('about', selfInfo));
 console.log(infinity.add_master('name',names));
 console.log(infinity.add_master('address', address));
 
 console.log(infinity.master);
-infinity.update_master('address','street','The Avenue');
-console.log(infinity.master);
-    speechIn.listen();//Made changes
-
+infinity.update_master('address', 'street', 'The Avenue street');
+console.log(infinity.get_masterCategory('address'));
+   // speechIn.listen();//Made changes
+    $("#yousay").val("add category");
     $("#yousay").keyup(function (e) {
         if (e.keyCode === 13) {
-            var countries = getCountryList();
-            var cities = getCities('Australia');
-            $("#yousaid").html($("#yousay").val());
-            $("#mautasays").html(infinity.talker_analyze($("#yousay").val(), analyzer));
-
+            if (mauta.mode == 1) {
+                let countries = getCountryList();
+                let cities = getCities('Australia');
+                $("#yousaid").html($("#yousay").val());
+                $("#mautasays").html(infinity.talker_analyze($("#yousay").val(), analyzer));
+            } else {
+                $("#yousaid").html($("#yousay").val());
+                $("#mautasays").html(command.executeCommand($("#yousay").val()));
+                $("#yousay").val("");
+                $("#yousay").focus();
+            }
         }
 });
  

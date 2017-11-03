@@ -16,59 +16,71 @@
 </head>
 
 <body>
-    <!--<div class="nav">
+    <div class="mauta">
+        <!--<div class="nav">
+            <div class="row">
+                <h1>Mauta</h1>
+            </div>
+        </div>-->
+
+        <div class="top-mauta">
+            <div class="centered-fixed-mauta ">
+                <div class="centered-mauta blink-green"></div>
+            </div>
+
+        </div>
+   
         <div class="row">
-            <h1>Mauta</h1>
+            <span class="col-md-3 group">You Say:</span><span class="col-md-10"><input id="yousay" type="text" class="form-control" value="are you going to school"></span>
         </div>
-    </div>-->
-
-    <div class="top-mauta">
-        <div class="centered-fixed-mauta ">
-            <div class="centered-mauta blink-green"></div>
+    <div class="conversation">
+        <div class="row">
+            <div class="col-md-3 group">Conversation:</div>
         </div>
-    
-    </div>
-    <!--<div class="row">
-        <span class="col-md-3 group">Mauta Says:</span><span class="col-md-10"><input id="mautasays" type="text" class="form-control"></span>
-    </div>-->
-    <div class="row">
-        <span class="col-md-3 group">You Say:</span><span class="col-md-10"><input id="yousay" type="text" class="form-control" value="are you going to school"></span>
-    </div>
-    <div class="row">
-        <div class="col-md-3 group">Conversation Says:</div>
-        <div class="chat-result">
-            <div class="col-md-10"><span class="name-title">You said:</span><span class="messages-title" id="yousaid"></span></div>
-            <div class="col-md-10"><span class="name-title">Mauta says:</span><span class="messages-title" id="mautasays"></span></div>
+        <div class="row">
+            <div class="chat-result">
+                <div class="col-md-10"><span class="name-title">You said:</span><span class="messages-title" id="yousaid"></span></div>
+            </div>
         </div>
-        
-    </div>
-
-    <div class="row">
-        <p id="geolocation">Watching geolocation...</p>
-        </div>
-    <div class="app">
-
-        <div id="deviceready" class="blink">
-            <span class="event listening">Connecting to Device</span>
-            <span class="event received">Device is Ready</span>
+        <div class="row">
+            <div class="chat-result mauta-say">
+                <div class="col-md-10"><span class="name-title">Mauta says:</span><span class="messages-title" id="mautasays"></span></div>
+            </div>
         </div>
     </div>
 
+        <div class="row">
+             <div class="dyn_output">
+        </div>
+         </div>
+        <div class="row">
+            <p id="geolocation">Watching geolocation...</p>
+        </div>
+
+        <div class="app">
+
+            <div id="deviceready" class="blink">
+                <span class="event listening">Connecting to Device</span>
+                <span class="event received">Device is Ready</span>
+            </div>
+        </div>
 
 
-    <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+
+        <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
 
 
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript" src="js/compromise-10.7.2.js"></script>
-    <script type="text/javascript" src="js/mauta-core.js"></script>
-    <script type="text/javascript" src="js/countries.js"></script>
-    <script type="text/javascript" src="js/mauta.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/compromise-10.7.2.js"></script>
+        <script type="text/javascript" src="js/mauta-core.js"></script>
+        <script type="text/javascript" src="js/countries.js"></script>
+        <script type="text/javascript" src="js/mauta.js"></script>
 
-    <script type="text/javascript">
+        <script type="text/javascript">
         //app.initialize();
-    </script>
+        </script>
+    </div>
 
 </body>
 
