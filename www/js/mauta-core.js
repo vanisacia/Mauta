@@ -1,4 +1,17 @@
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 var mauta = {
     mode: 0,//0 and 1 : 0 for command mode and 1 for analytic mode
     name: 'mauta',
@@ -41,6 +54,14 @@ var command = {
         this.name.push("categories");
         this.method.push("getAllCategories");
         this.number.push(3);
+
+        this.name.push("run numbers");
+        this.method.push("runNumbers");
+        this.number.push(4);
+
+        this.name.push("stop numbers");
+        this.method.push("stopNumbers");
+        this.number.push(5);
     },
     reset: function () {
         command.mode = 0;
@@ -80,6 +101,18 @@ var command = {
                     commonResponse.command = com.method;
                     commonResponse.number = com.number;
                     command.mode = 1;
+                    if (codeToExecute = "command.runNumbers()") {
+                        command.mode = 0;
+                    }
+                    if (codeToExecute = "command.stopNumbers()") {
+                        let numbers = '';
+
+                        $.each(commonResponse.response, function () {
+                            numbers = numbers + this + ",";
+                        });
+                        commonResponse.response = numbers;
+                        command.mode = 0;
+                    }
                     return commonResponse.response;
                 } else {
                     //reset
@@ -98,7 +131,6 @@ var command = {
                     }
                     //Reset
                     command.reset();
-
                     return respond;
                 }
                 let codeToExecute = "command." + commonResponse.command + "('" + inputCommand + "')";
@@ -126,10 +158,7 @@ var command = {
                 }
                 return respond;
             }
-        
         }
-     
-        
     },
     getCategory:function(name) {
         var state = infinity.check_master_state(category);
@@ -157,6 +186,14 @@ var command = {
             commonResponse.response = "Type Category Name";
             return;
         }
+    },
+    runNumbers: function () {
+        commonResponse.response = numbGenerator.runNumber();
+    },
+    stopNumbers: function () {
+        commonResponse.response = numbGenerator.stopNumbers();
+
+        return 0;
     },
     addCategory:function(value) {
         let response;
@@ -216,9 +253,6 @@ var command = {
         });
         return wrapper;
     }
-
-      
-    
 };
 
 
@@ -601,6 +635,104 @@ var speechIn = {
         recognition.onresult = function (event) {
             console.log('You said: ', event.results[0][0].transcript);
         };
+    }
+}
+
+
+
+
+
+var numbGenerator = {
+    num: [],
+    score: [],
+    min: 1,
+    max: 59,
+    numLen: 6,
+    tStatus: 0,
+    master: [],
+    numList :[],
+    initialize: function () {
+        for (var x = 1; x <= this.max; x++) {
+            numbGenerator.num.push(x);
+            numbGenerator.score.push(0);
+        }
+    },
+    runNumber: function () {
+        numbGenerator.master = [];
+        numbGenerator.numList = [];
+        numbGenerator.tStatus = setInterval(function () {
+            for (var x = 0; x < numbGenerator.numLen; x++) {
+                //let number = Math.floor(Math.random() * (numbGenerator.max - numbGenerator.min) + numbGenerator.min);
+                numbGenerator.numList.push(Math.floor(Math.random() * (numbGenerator.max - numbGenerator.min) + numbGenerator.min));
+            }
+            numbGenerator.master.push(numbGenerator.numList);
+            console.log(numbGenerator.numList);
+            let cur = '';
+            $.each(numbGenerator.numList, function () {
+                cur = cur + this+ ',';
+                let div = '<div> ' + cur + '</div>';
+                $("#idcontent").prepend(cur + '\r\n');
+                //$("#idcontent").append(cur +'\r\n');
+            
+            });
+            numbGenerator.numList = [];
+           
+            $("#idcontent").append(cur);
+        }, 100);
+    },
+    stopNumbers: function () {
+        try {
+            clearInterval(numbGenerator.tStatus);
+            let line = 0;
+            numbGenerator.initialize();
+            $.each(numbGenerator.master, function () {
+                let currentLine = $(this);
+
+                $.each(currentLine, function () {
+                    let currNum = 0;
+                    currNum = parseInt($(this)[0]);
+                    let curr = numbGenerator.num.indexOf(currNum);
+                    let numValue = numbGenerator.score[numbGenerator.num.indexOf(currNum)];
+                    numValue++;
+                    //Set score
+                    numbGenerator.score[numbGenerator.num.indexOf(currNum)] = numValue;
+                });
+
+                line++;
+            });
+            let scr = [];
+            for (var x = 0; x <= numbGenerator.numLen; x++) {
+
+                let lastnum = 0;
+                $.each(numbGenerator.score, function () {
+                    let cur = parseInt($(this)[0]);
+                    if (cur > lastnum) {
+                        lastnum = cur;
+                    }
+                });
+                let item = numbGenerator.score.indexOf(lastnum);
+                scr.push(numbGenerator.score.indexOf(lastnum));
+                numbGenerator.score.splice(numbGenerator.score.indexOf(lastnum), 1);
+                //numbGenerator.score = numbGenerator.score.filter(item => item !== value)
+            }
+
+            let yourNumber = [];
+            
+            $.each(scr, function () {
+                let cur = parseInt($(this)[0]);
+             
+                yourNumber.push(numbGenerator.num.indexOf(cur));
+            });
+           
+            $.each(yourNumber, function () {
+                let content = $(this);
+                console.log(parseInt($(this)[0]));
+               
+            });
+            return yourNumber;
+        } catch (ex) {
+            alert(ex);
+        }
     }
 }
 

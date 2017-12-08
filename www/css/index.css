@@ -156,7 +156,8 @@ h1 {
     -webkit-animation: fade 3000ms infinite;
 }
 .mauta{
-    border:1px solid;
+    position:relative;
+    width:100%;
 }
 
     .mauta .row {
@@ -182,10 +183,29 @@ h1 {
 .mauta .dyn_output {
     
 }
+    .mauta .response-message {
+        height: 300px;
+        display: block;
+        overflow: auto;
+    }
+
     .mauta .dyn_output .row {
         border-bottom: 1px solid;
     }
-    .mauta .dyn_output .row span {
-       margin:4px;
-       padding:4px;
+
+        .mauta .dyn_output .row span {
+            margin: 4px;
+            padding: 4px;
+        }
+
+    .mauta .running-act {
+        position: relative;
+        cursor: pointer;
     }
+
+        .mauta .running-act .content {
+        
+            width: 400px;
+            height: 230px;
+            overflow:auto;
+        }
