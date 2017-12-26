@@ -101,10 +101,10 @@ var command = {
                     commonResponse.command = com.method;
                     commonResponse.number = com.number;
                     command.mode = 1;
-                    if (codeToExecute = "command.runNumbers()") {
+                    if (codeToExecute == "command.runNumbers()") {
                         command.mode = 0;
                     }
-                    if (codeToExecute = "command.stopNumbers()") {
+                    if (codeToExecute == "command.stopNumbers()") {
                         let numbers = '';
 
                         $.each(commonResponse.response, function () {

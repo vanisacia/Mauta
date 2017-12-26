@@ -1,4 +1,28 @@
-$(document).ready(function(){
+$(document).ready(function () {
+    //Section Self
+
+
+    //  points.sort(function(a, b){return a - b});
+    //  document.getElementById("demo").innerHTML = points;
+
+    window.resizeTo("500", "600");
+    var dyna_mo = {};
+    dyna_mo.key = 'Data';
+    for (var x = 0; x < 10; x++) {
+        dyna_mo['nam' + x] = x;
+    }
+
+
+    let t = navigator.hardwareConcurrency;
+    let selfInfo = {
+        'name': 'Mauta',
+        'cpu': navigator.cpuClass,
+        'language': navigator.language,
+        'platform': navigator.platform,
+        'age': 'nano byte',
+        'address':'www. I live in the cloud. Ha ha'
+    };
+    //Section Force Data
     var names = {
         'first': 'Ivan',
         'middle': 'Isaac',
@@ -14,21 +38,29 @@ $(document).ready(function(){
         'country': 'United Kingdom'
     };
 
+    //var voices = speechSynthesis.getVoices();
+console.log(infinity.add_self('about', selfInfo));
 console.log(infinity.add_master('name',names));
-console.log(infinity.add_master('address',address));
+console.log(infinity.add_master('address', address));
 
 console.log(infinity.master);
-infinity.update_master('address','street','The Avenue');
-console.log(infinity.master);
-
-
+infinity.update_master('address', 'street', 'The Avenue street');
+console.log(infinity.get_masterCategory('address'));
+   // speechIn.listen();//Made changes
+    $("#yousay").val("add category");
     $("#yousay").keyup(function (e) {
         if (e.keyCode === 13) {
-            var countries = getCountryList();
-            var cities = getCities('Australia');
-            $("#yousaid").html($("#yousay").val());
-            $("#mautasays").html(infinity.talker_analyze($("#yousay").val(), analyzer));
-
+            if (mauta.mode == 1) {
+                let countries = getCountryList();
+                let cities = getCities('Australia');
+                $("#yousaid").html($("#yousay").val());
+                $("#mautasays").html(infinity.talker_analyze($("#yousay").val(), analyzer));
+            } else {
+                $("#yousaid").html($("#yousay").val());
+                $("#mautasays").html(command.executeCommand($("#yousay").val()));
+                $("#yousay").val("");
+                $("#yousay").focus();
+            }
         }
 });
  
@@ -38,9 +70,9 @@ console.log(infinity.master);
 
     function onSuccess(position) {
         var element = document.getElementById('geolocation');
-        element.innerHTML = 'Latitude: ' + position.coords.latitude + '<br />' +
-            'Longitude: ' + position.coords.longitude + '<br />' +
-            '<hr />' + element.innerHTML;
+        //element.innerHTML = 'Latitude: ' + position.coords.latitude + '<br />' +
+        //    'Longitude: ' + position.coords.longitude + '<br />' +
+        //    '<hr />' + element.innerHTML;
     }
 
     // onError Callback receives a PositionError object
@@ -48,6 +80,7 @@ console.log(infinity.master);
     function onError(error) {
         alert('code weired: ' + error.code + '\n' +
             'message: ' + error.message + '\n');
+        //made a change      here     gh
     }
 });
 
