@@ -166,5 +166,38 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-sqlite-storage": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-sqlite-storage"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-bluetoothle": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-bluetoothle@4.4.3"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "phonegap-plugin-push": {
+        "source": {
+            "type": "registry",
+            "id": "phonegap-plugin-push"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-speechrecognition": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/pbakondy/cordova-plugin-speechrecognition",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }
