@@ -82,5 +82,19 @@ console.log(infinity.get_masterCategory('address'));
             'message: ' + error.message + '\n');
         //made a change      here     gh
     }
+    function onDeviceReady() {
+        alert('here');
+        let t23 = window.plugins;
+        window.plugins.speechRecognition.isRecognitionAvailable(function (available) {
+            if (available) {
+                // You can use the speechRecognition
+                alert('speech');
+            }
+        }, function (err) {
+            console.error(err);
+            alert('no speech');
+        });
+    }
+
 });
 

@@ -63,6 +63,15 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.phonegap.mauta"
+        },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.phonegap.mauta"
+        },
+        "cordova-plugin-bluetoothle": {
+            "PACKAGE_NAME": "com.phonegap.mauta"
+        },
+        "cordova-plugin-speechrecognition": {
+            "PACKAGE_NAME": "com.phonegap.mauta"
         }
     },
     "dependent_plugins": {
